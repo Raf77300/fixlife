@@ -26,7 +26,6 @@ export default function Signup() {
     e.preventDefault()
     setLoading(true)
 
-    // 🔥 Aquí luego conectamos backend (por ahora demo)
     console.log("Signup attempt:", formData)
     setTimeout(() => {
       setLoading(false)
@@ -37,29 +36,29 @@ export default function Signup() {
   return (
     <div className="min-h-screen bg-[radial-gradient(1200px_600px_at_20%_10%,rgba(11,99,246,0.45),transparent_60%),radial-gradient(900px_500px_at_90%_30%,rgba(255,199,44,0.40),transparent_60%),linear-gradient(135deg,#0B63F6_0%,#0B63F6_55%,#FFC72C_55%,#FFC72C_100%)]">
       <div className="mx-auto flex min-h-screen max-w-6xl items-center justify-center px-4 py-10">
-        <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl md:grid-cols-2">
+        <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl md:grid-cols-2 animate-zoom-in">
           {/* LEFT (ANIMATED PANEL) */}
           <div className="relative hidden md:block">
             <div className="absolute inset-0 auth-panel auth-panel-signup">
               <div className="absolute inset-0 bg-[radial-gradient(600px_300px_at_50%_30%,rgba(255,255,255,0.18),transparent_60%)]" />
-              <div className="relative flex h-full flex-col items-center justify-center p-10 text-center">
-                <h2 className="text-4xl font-extrabold text-white drop-shadow">
+              <div className="relative flex h-full flex-col items-center justify-center p-10 text-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                <h2 className="text-4xl font-extrabold text-white drop-shadow-lg">
                   Welcome Back!
                 </h2>
                 <p className="mt-3 max-w-sm text-white/85">
                   To keep connected with us please login with your personal info.
                 </p>
-                  <Button asChild className="mt-6 bg-white/15 hover:bg-white/20 text-white border border-white/25">
-                    <Link to="/login">
-                      SIGN IN
-                    </Link>
-                  </Button>
+                <Button asChild className="mt-6 bg-white/15 hover:bg-white/20 text-white border border-white/25 backdrop-blur-sm transition-all duration-300 hover:scale-105">
+                  <Link to="/login">
+                    SIGN IN
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
 
           {/* RIGHT (FORM) */}
-          <div className="p-6 md:p-10">
+          <div className="p-6 md:p-10 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             <div className="flex items-center gap-3">
               <div className="grid h-10 w-10 place-items-center rounded-2xl bg-[#0B63F6] text-white font-extrabold">
                 FL
@@ -74,7 +73,7 @@ export default function Signup() {
               Fill in your details to create your FixLife account.
             </p>
 
-            <Card className="mt-5 border-white/15 bg-white/10">
+            <Card className="mt-5 border-white/15 bg-white/10 backdrop-blur-sm">
               <CardContent className="p-5">
                 <form onSubmit={onSubmit} className="space-y-3">
                   <div className="grid gap-3 sm:grid-cols-2">
@@ -84,7 +83,7 @@ export default function Signup() {
                         required
                         name="firstName"
                         placeholder="Rafa"
-                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50 focus:border-[#FFC72C] focus:ring-2 focus:ring-[#FFC72C]/20 transition-all"
                         value={formData.firstName}
                         onChange={handleChange}
                       />
@@ -95,7 +94,7 @@ export default function Signup() {
                         required
                         name="lastName"
                         placeholder="Hernández"
-                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50 focus:border-[#FFC72C] focus:ring-2 focus:ring-[#FFC72C]/20 transition-all"
                         value={formData.lastName}
                         onChange={handleChange}
                       />
@@ -107,7 +106,7 @@ export default function Signup() {
                     <Input
                       name="phone"
                       placeholder="+503 #### ####"
-                      className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                      className="border-white/20 bg-white/15 text-white placeholder:text-white/50 focus:border-[#FFC72C] focus:ring-2 focus:ring-[#FFC72C]/20 transition-all"
                       value={formData.phone}
                       onChange={handleChange}
                     />
@@ -120,7 +119,7 @@ export default function Signup() {
                       required
                       name="email"
                       placeholder="you@example.com"
-                      className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                      className="border-white/20 bg-white/15 text-white placeholder:text-white/50 focus:border-[#FFC72C] focus:ring-2 focus:ring-[#FFC72C]/20 transition-all"
                       value={formData.email}
                       onChange={handleChange}
                     />
@@ -134,7 +133,7 @@ export default function Signup() {
                         required
                         name="password"
                         placeholder="••••••••"
-                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50 focus:border-[#FFC72C] focus:ring-2 focus:ring-[#FFC72C]/20 transition-all"
                         value={formData.password}
                         onChange={handleChange}
                       />
@@ -146,7 +145,7 @@ export default function Signup() {
                         required
                         name="confirmPassword"
                         placeholder="••••••••"
-                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50 focus:border-[#FFC72C] focus:ring-2 focus:ring-[#FFC72C]/20 transition-all"
                         value={formData.confirmPassword}
                         onChange={handleChange}
                       />
@@ -156,14 +155,14 @@ export default function Signup() {
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="mt-2 w-full bg-[#FFC72C] hover:bg-[#FFB800] text-black font-semibold"
+                    className="mt-2 w-full bg-[#FFC72C] hover:bg-[#FFB800] text-black font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-[#FFC72C]/20"
                   >
                     {loading ? "Creating..." : "SIGN UP"}
                   </Button>
 
                   <div className="pt-2 text-center text-xs text-white/80">
                     Already have an account?{" "}
-                    <Link to="/login" className="underline underline-offset-4 hover:text-white">
+                    <Link to="/login" className="underline underline-offset-4 hover:text-white transition-colors">
                       Sign in
                     </Link>
                   </div>
