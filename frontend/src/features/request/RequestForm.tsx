@@ -1,5 +1,5 @@
 // frontend/src/features/request/RequestForm.tsx
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { useLocation } from "react-router-dom"
 import Wizard from "../../components/wizard/Wizard"
 import type { WizardStepConfig } from "../../components/wizard/Wizard"
@@ -89,15 +89,17 @@ function formatMoney(n: number) {
 }
 
 function useImageDnD(value: File[], onChange: (files: File[]) => void) {
-  const onDrop = (e: React.DragEvent) => {
+  const onDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     const files = Array.from(e.dataTransfer.files || []).filter((f) => f.type.startsWith("image/"))
     if (files.length) onChange([...value, ...files].slice(0, 6))
-  }
-  const onPick = (e: React.ChangeEvent<HTMLInputElement>) => {
+  }, [value, onChange])
+
+  const onPick = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []).filter((f) => f.type.startsWith("image/"))
     if (files.length) onChange([...value, ...files].slice(0, 6))
-  }
+  }, [value, onChange])
+
   return { onDrop, onPick }
 }
 
@@ -108,18 +110,15 @@ function ImageThumb({
   file: File
   onRemove: () => void
 }) {
-  const [url, setUrl] = useState<string>("")
+  const url = useMemo(() => URL.createObjectURL(file), [file])
 
   useEffect(() => {
-    const u = URL.createObjectURL(file)
-    setUrl(u)
-    return () => URL.revokeObjectURL(u)
-  }, [file])
+    return () => URL.revokeObjectURL(url)
+  }, [url])
 
   return (
     <div className="relative overflow-hidden rounded-xl border border-black/10 bg-black/5">
-      {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
-      {url ? <img src={url} alt={file.name} className="h-24 w-full object-cover" /> : null}
+      <img src={url} alt={file.name} className="h-24 w-full object-cover" />
       <button
         type="button"
         className="absolute right-2 top-2 rounded-full bg-black/70 px-2 py-1 text-xs text-white hover:bg-black"
@@ -172,7 +171,7 @@ export default function RequestForm() {
           if (d.images.length === 0) e.images = "Add at least 1 image (required for now)."
           return e
         },
-        content: ({ data, setData }) => {
+        content: function ProblemStep({ data, setData }) {
           const { onDrop, onPick } = useImageDnD(data.images, (files) => setData((p) => ({ ...p, images: files })))
 
           return (
@@ -249,7 +248,8 @@ export default function RequestForm() {
           if (!d.serviceType) e.serviceType = "Select service type."
           return e
         },
-        content: ({ data, setData }) => (
+        content: function DetailsStep({ data, setData }) {
+          return (
           <WizardStep>
             <div className="grid gap-4 md:grid-cols-3">
               <div className="rounded-2xl border border-black/10 bg-white p-5">
@@ -334,7 +334,8 @@ export default function RequestForm() {
               </div>
             </div>
           </WizardStep>
-        ),
+          )
+        },
       },
 
       {
@@ -347,7 +348,8 @@ export default function RequestForm() {
           if (!d.city || d.city.trim().length < 2) e.city = "Enter your city."
           return e
         },
-        content: ({ data, setData }) => (
+        content: function LocationStep({ data, setData }) {
+          return (
           <WizardStep>
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="rounded-2xl border border-black/10 bg-white p-5">
@@ -409,7 +411,8 @@ export default function RequestForm() {
               </div>
             </div>
           </WizardStep>
-        ),
+          )
+        },
       },
 
       {
@@ -421,7 +424,8 @@ export default function RequestForm() {
           if (d.estimatedBudget === "" || Number(d.estimatedBudget) <= 0) e.estimatedBudget = "Enter a budget > 0."
           return e
         },
-        content: ({ data, setData }) => (
+        content: function OfferStep({ data, setData }) {
+          return (
           <WizardStep>
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="rounded-2xl border border-black/10 bg-white p-5">
@@ -520,7 +524,8 @@ export default function RequestForm() {
               </div>
             </div>
           </WizardStep>
-        ),
+          )
+        },
       },
     ],
     [categoryFromUrl]

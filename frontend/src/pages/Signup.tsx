@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
+import * as React from "react"
 import { useState } from "react"
 import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
@@ -7,12 +8,26 @@ import { Input } from "../components/ui/input"
 export default function Signup() {
   const nav = useNavigate()
   const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  })
 
-  function onSubmit(e: React.FormEvent) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
 
     // 🔥 Aquí luego conectamos backend (por ahora demo)
+    console.log("Signup attempt:", formData)
     setTimeout(() => {
       setLoading(false)
       nav("/login")
@@ -34,11 +49,11 @@ export default function Signup() {
                 <p className="mt-3 max-w-sm text-white/85">
                   To keep connected with us please login with your personal info.
                 </p>
-                <Link to="/login">
-                  <Button className="mt-6 bg-white/15 hover:bg-white/20 text-white border border-white/25">
-                    SIGN IN
+                  <Button asChild className="mt-6 bg-white/15 hover:bg-white/20 text-white border border-white/25">
+                    <Link to="/login">
+                      SIGN IN
+                    </Link>
                   </Button>
-                </Link>
               </div>
             </div>
           </div>
@@ -67,16 +82,22 @@ export default function Signup() {
                       <label className="text-xs text-white/80">First name</label>
                       <Input
                         required
+                        name="firstName"
                         placeholder="Rafa"
                         className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        value={formData.firstName}
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="space-y-1">
                       <label className="text-xs text-white/80">Last name</label>
                       <Input
                         required
+                        name="lastName"
                         placeholder="Hernández"
                         className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        value={formData.lastName}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -84,8 +105,11 @@ export default function Signup() {
                   <div className="space-y-1">
                     <label className="text-xs text-white/80">Phone</label>
                     <Input
+                      name="phone"
                       placeholder="+503 #### ####"
                       className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                      value={formData.phone}
+                      onChange={handleChange}
                     />
                   </div>
 
@@ -94,8 +118,11 @@ export default function Signup() {
                     <Input
                       type="email"
                       required
+                      name="email"
                       placeholder="you@example.com"
                       className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                      value={formData.email}
+                      onChange={handleChange}
                     />
                   </div>
 
@@ -105,8 +132,11 @@ export default function Signup() {
                       <Input
                         type="password"
                         required
+                        name="password"
                         placeholder="••••••••"
                         className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        value={formData.password}
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="space-y-1">
@@ -114,8 +144,11 @@ export default function Signup() {
                       <Input
                         type="password"
                         required
+                        name="confirmPassword"
                         placeholder="••••••••"
                         className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>

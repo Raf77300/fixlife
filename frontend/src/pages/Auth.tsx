@@ -25,7 +25,7 @@ export default function Auth() {
   const isSignUp = mode === "signup"
   const [loading, setLoading] = useState(false)
 
-  function submitLogin(e: React.FormEvent) {
+  function submitLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
     setTimeout(() => {
@@ -34,7 +34,7 @@ export default function Auth() {
     }, 700)
   }
 
-  function submitSignup(e: React.FormEvent) {
+  function submitSignup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
     setTimeout(() => {

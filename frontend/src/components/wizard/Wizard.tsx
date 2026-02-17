@@ -1,8 +1,9 @@
 // frontend/src/components/wizard/Wizard.tsx
-import React, { createContext, useContext, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import WizardProgress from "./WizardProgress"
 import { Button } from "../ui/button"
 import { Card, CardContent } from "../ui/card"
+import { WizardContext } from "./useWizard"
 
 export type WizardStepConfig<T> = {
   id: string
@@ -19,14 +20,6 @@ type WizardContextValue = {
   goBack: () => void
   goTo: (idx: number) => void
   canGoBack: boolean
-}
-
-const WizardContext = createContext<WizardContextValue | null>(null)
-
-export function useWizard() {
-  const ctx = useContext(WizardContext)
-  if (!ctx) throw new Error("useWizard must be used inside <Wizard />")
-  return ctx
 }
 
 type WizardProps<T> = {
@@ -53,7 +46,7 @@ export default function Wizard<T>({
   const activeStep = steps[activeIndex]
   const isLast = activeIndex === total - 1
 
-  const validateStep = () => {
+  const validateStep = useCallback(() => {
     const fn = activeStep.validate
     if (!fn) {
       setErrors({})
@@ -69,9 +62,9 @@ export default function Wizard<T>({
 
     setErrors(flat)
     return Object.keys(flat).length === 0
-  }
+  }, [activeStep, data])
 
-  const goNext = async () => {
+  const goNext = useCallback(async () => {
     if (!validateStep()) return
 
     if (isLast) {
@@ -85,10 +78,10 @@ export default function Wizard<T>({
     }
 
     setActiveIndex((p) => Math.min(p + 1, total - 1))
-  }
+  }, [validateStep, isLast, onSubmit, data, total])
 
-  const goBack = () => setActiveIndex((p) => Math.max(p - 1, 0))
-  const goTo = (idx: number) => setActiveIndex(() => Math.max(0, Math.min(idx, total - 1)))
+  const goBack = useCallback(() => setActiveIndex((p) => Math.max(p - 1, 0)), [])
+  const goTo = useCallback((idx: number) => setActiveIndex(() => Math.max(0, Math.min(idx, total - 1))), [total])
 
   const ctxValue = useMemo<WizardContextValue>(
     () => ({
@@ -99,7 +92,7 @@ export default function Wizard<T>({
       goTo,
       canGoBack: activeIndex > 0,
     }),
-    [activeIndex, total]
+    [activeIndex, total, goNext, goBack, goTo]
   )
 
   return (

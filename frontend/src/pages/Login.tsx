@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
+import * as React from "react"
 import { useState } from "react"
 import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
@@ -7,12 +8,15 @@ import { Input } from "../components/ui/input"
 export default function Login() {
   const nav = useNavigate()
   const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
-  function onSubmit(e: React.FormEvent) {
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
 
     // 🔥 Aquí luego conectamos backend (por ahora demo)
+    console.log("Login attempt:", { email, password })
     setTimeout(() => {
       setLoading(false)
       nav("/")
@@ -63,22 +67,26 @@ export default function Login() {
                 <form onSubmit={onSubmit} className="space-y-3">
                   <div className="space-y-1">
                     <label className="text-xs text-white/80">Email</label>
-                    <Input
-                      type="email"
-                      required
-                      placeholder="you@example.com"
-                      className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
-                    />
+                      <Input
+                        type="email"
+                        required
+                        placeholder="you@example.com"
+                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        value={email}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                      />
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-xs text-white/80">Password</label>
-                    <Input
-                      type="password"
-                      required
-                      placeholder="••••••••"
-                      className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
-                    />
+                      <Input
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        className="border-white/20 bg-white/15 text-white placeholder:text-white/50"
+                        value={password}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                      />
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
@@ -121,11 +129,11 @@ export default function Login() {
                 <p className="mt-3 max-w-sm text-white/85">
                   Enter your personal details and start your journey with FixLife.
                 </p>
-                <Link to="/signup">
-                  <Button className="mt-6 bg-white/15 hover:bg-white/20 text-white border border-white/25">
+                <Button asChild className="mt-6 bg-white/15 hover:bg-white/20 text-white border border-white/25">
+                  <Link to="/signup">
                     SIGN UP
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
